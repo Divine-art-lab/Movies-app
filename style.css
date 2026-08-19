@@ -56,6 +56,11 @@ main section#search div input[type="submit"] {
   background-color: var(--accent);
   color: var(--bg-overlay);
 }
+main section#search div input[type="search"] {
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--text-primary);
+}
 main section#search div input {
   border-radius: 2px;
   font-size: 1rem;
