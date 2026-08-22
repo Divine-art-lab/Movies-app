@@ -4,11 +4,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title></title>
+  <title>Search for movies</title>
+  
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
 </head>
 
 <body>
-  
+  <main>
+    <header>
+      <h2 id="logo">MOVIES</h2>
+      <nav>
+        <ul>
+          <li><a href="/index.html">Movies</a></li>
+          <li><a href="/shows.html">TV Shows</a></li>
+        </ul>
+      </nav>
+    </header>
+    
+    <section id="search">
+      <form method="get" accept-charset="utf-8">
+        
+        <div>
+          <input type="radio" name="movies" id="movies" />
+          <label for="movies">Movies</label>
+          
+          <input type="radio" name="movies" id="tvShows" />
+          <label for="tvShows">TV Shows</label>
+        </div>
+        
+        <div>
+          <input type="search" name="search" id="search-bar" placeholder="Enter search item">
+          <button type="submit"><i class="fa fa-search"></i></button>
+        </div>
+        
+      </form>
+    </section>
+  </main>
 </body>
 
 </html>
