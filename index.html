@@ -7,6 +7,7 @@
   <title>The Movies</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="lib/fontawesome.css">
+  <link rel="stylesheet" href="lib/loader.css">
   
   <script src="main.js" defer></script>
 </head>
@@ -50,13 +51,17 @@
       </form>
     </section>
     
-    <section id="popular-movies">
+    <section id="popular-movies" class="parentCard">
       <h2>POPULAR MOVIES</h2>
-      <section id="movies">
+      <section id="movies" class="subparent-card">
         
       </section>
     </section>
   </main>
+  
+  <div id="loading" class="hide">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
   
 </body>
 

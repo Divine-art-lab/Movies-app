@@ -11,16 +11,24 @@ function highlightActiveLink() {
     }
   })
 }
+//SHOW AND HIDE LOADING ICON
+function showLoading() {
+  document.querySelector('#loading').className = 'show';
+}
+function hideLoading() {
+  document.querySelector('#loading').className = 'hide';
+}
+
 
 //DISPLAY POPULAR MOVIES FUNCTION
-async function displayPopularMovies() {
-  const { results } = await fetchData('movie/popular');
+async function displayPopularMovies(endpoint, parentElement, titleKey, dateKey) {
+  const { results } = await fetchData(endpoint);
   results.forEach((movie) => {
-    document.querySelector('#popular-movies #movies').appendChild(createElements(movie));
+    document.querySelector(parentElement).appendChild(createElements(movie, titleKey, dateKey));
   })
 }
 //CREAT ELEMENTS
-function createElements(param) {
+function createElements(param, titleKey, dateKey) {
   const div = document.createElement('div');
   const image = document.createElement('img');
   const h3 = document.createElement('h3');
@@ -28,9 +36,10 @@ function createElements(param) {
   
   div.classList.add('movie-card');
   
-  image.src = `https://image.tmdb.org/t/p/w342${param.poster_path}`;
-  h3.textContent = param.title;
-  p.innerHTML = `Release: ${param.release_date}`;
+  image.src = param.poster_path ? `https://image.tmdb.org/t/p/w342${param.poster_path}` : 'images/screen.jpg';
+  image.alt = param[titleKey];
+  h3.textContent = param[titleKey];
+  p.innerHTML = `Release: ${param[dateKey]}`;
   
   div.appendChild(image);
   div.appendChild(h3);
@@ -44,10 +53,12 @@ async function fetchData(endpoint) {
   const API_URL = 'https://api.themoviedb.org/3/';
   const API_KEY = '2800bf9781420f03f7ab74f60245cbcf';
   
+  showLoading();
   const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
   
   const data = await response.json();
   
+  hideLoading();
   return data;
 }
 
@@ -57,10 +68,10 @@ function init() {
   switch (global.currentPage) {
     case '/':
     case '/index.html':
-      displayPopularMovies();
+      displayPopularMovies('movie/popular', '#popular-movies #movies', 'title', 'release_date');
       break;
     case '/shows.html':
-      console.log('Shows')
+      displayPopularMovies('tv/popular', '#popular-tv #tvshows', 'name', 'first_air_date');
       break;
     case '/show-details.html':
       console.log('Derails')
@@ -76,4 +87,4 @@ function init() {
   highlightActiveLink()
 }
 
-document.addEventListener('DOMContentLoaded', init());
+document.addEventListener('DOMContentLoaded', init);

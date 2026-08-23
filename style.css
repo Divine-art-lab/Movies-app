@@ -45,6 +45,7 @@ main header ul li a {
   text-decoration: none;
   color: var(--text-primary);
   padding: 0 0.25rem;
+  font-weight: bold;
 }
 main header nav ul li a.activeLink {
   color: var(--accent);
@@ -71,6 +72,7 @@ main section#search div input[type="search"] {
   background-color: transparent;
   color: var(--text-primary);
   border: 1px solid var(--text-primary);
+  outline: none;
 }
 main section#search div input {
   border-radius: 2px;
@@ -78,21 +80,26 @@ main section#search div input {
   padding: 0.25rem;
   border: none;
 }
-main section#popular-movies h2 {
+main section.parentCard h2 {
   text-align: center;
   padding: 1rem;
 }
-main section#popular-movies #movies {
+main section.parentCard .subparent-card {
   padding: 1rem;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
-  gap: 5px;
+  gap: 10px;
 }
-main section#popular-movies #movies .movie-card{
+main section.parentCard .subparent-card .movie-card{
   padding: 4px;
   background-color: var(--bg-card);
+  transform: scale(1);
+  transition: transform .2s;
 }
-main section#popular-movies #movies .movie-card img {
+main section.parentCard .subparent-card .movie-card:hover {
+  transform: scale(1.02);
+}
+main section.parentCard .subparent-card .movie-card img {
   width: 100%;
 }
 
@@ -111,3 +118,4 @@ main section#popular-movies #movies .movie-card img {
   background-color: var(--accent-dark);
   color: var(--text-primary);
 }
+

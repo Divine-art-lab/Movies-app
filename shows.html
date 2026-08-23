@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Movies show</title
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="lib/loader.css">
   <script src="main.js" defer></script>
 </head>
 
@@ -21,13 +22,17 @@
       </nav>
     </header>
     
-    <section id="popular-movies">
+    <section id="popular-tv" class="parentCard">
       <h2>POPULAR TV Shows</h2>
-      <section id="movies">
+      <section id="tvshows" class="subparent-card">
         
       </section>
     </section>
   </main>
+  
+  <div id="loading" class="hide">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
 </body>
 
 </html>
