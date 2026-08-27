@@ -90,11 +90,15 @@ main section.parentCard .subparent-card {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
   gap: 10px;
 }
-main section.parentCard .subparent-card .movie-card{
+main section.parentCard .subparent-card .movie-card {
   padding: 4px;
   background-color: var(--bg-card);
   transform: scale(1);
   transition: transform .2s;
+}
+main section.parentCard .subparent-card .movie-card a {
+  text-decoration: none;
+  color: var(--text-primary);
 }
 main section.parentCard .subparent-card .movie-card:hover {
   transform: scale(1.02);
@@ -118,4 +122,47 @@ main section.parentCard .subparent-card .movie-card img {
   background-color: var(--accent-dark);
   color: var(--text-primary);
 }
-
+#movie-details {
+  padding: 1rem;
+}
+#movie-details img {
+  width: 100%;
+}
+#movie-details article h3 {
+  text-align: center;
+  padding: 1rem;
+}
+#movie-details article p {
+  margin-bottom: 0.5rem;
+}
+@media (width > 400px) {
+  #movie-details {
+    display: flex;
+    gap: 10px;
+  }
+  #movie-details img {
+    width: 50%;
+  }
+}
+#movie-info {
+  padding: 1rem;
+}
+#movie-info > h3 {
+  text-align: center;
+}
+#movie-info ul li span {
+  color: var(--accent-dark);
+}
+#movie-info ul {
+  list-style-type: none;
+  
+}
+#movie-info ul li {
+  padding: 0.5rem;
+  padding-inline: 0;
+  border-bottom: 1px solid var(--text-muted);
+}
+#companies {
+  padding: 1rem;
+  padding-inline: 0;
+}

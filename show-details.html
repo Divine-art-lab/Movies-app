@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Movie Details</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="lib/loader.css.css">
   <script src="main.js" defer></script>
 </head>
 
@@ -21,9 +22,15 @@
       </nav>
     </header>
     
-    <button type="button" id="rtnBtn">Back To Movies</button>
+    <button type="button" id="rtnBtn" onclick="history.back()">Back To Movies</button>
+    
     
   </main>
+  
+  <div id="loading" class="hide">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
+
 </body>
 
 </html>

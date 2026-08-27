@@ -21,7 +21,7 @@ function hideLoading() {
 
 
 //DISPLAY POPULAR MOVIES FUNCTION
-async function displayPopularMovies(endpoint, parentElement, titleKey, dateKey) {
+async function displayMovies(endpoint, parentElement, titleKey, dateKey) {
   const { results } = await fetchData(endpoint);
   results.forEach((movie) => {
     document.querySelector(parentElement).appendChild(createElements(movie, titleKey, dateKey));
@@ -33,6 +33,7 @@ function createElements(param, titleKey, dateKey) {
   const image = document.createElement('img');
   const h3 = document.createElement('h3');
   const p = document.createElement('p');
+  const anchor = document.createElement('a');
   
   div.classList.add('movie-card');
   
@@ -40,10 +41,13 @@ function createElements(param, titleKey, dateKey) {
   image.alt = param[titleKey];
   h3.textContent = param[titleKey];
   p.innerHTML = `Release: ${param[dateKey]}`;
+  anchor.href = `show-details.html?id=${param.id}`
   
-  div.appendChild(image);
-  div.appendChild(h3);
-  div.appendChild(p);
+  
+  anchor.appendChild(image);
+  anchor.appendChild(h3);
+  anchor.appendChild(p);
+  div.appendChild(anchor)
   
   return div;
 }
@@ -62,19 +66,60 @@ async function fetchData(endpoint) {
   return data;
 }
 
+//GET MOVIE DETAILS
+async function getMovieDetails() {
+  const movieId = window.location.search.split('=')[1];
+  console.log(movieId);
+  
+  const movies = await fetchData(`movie/${movieId}`);
+  
+  console.log(movies)
+  
+  document.querySelector('main').innerHTML += `
+    <section id="movie-details">
+      <img src = ${
+        movies.poster_path ? `https://image.tmdb.org/t/p/w342${movies.poster_path}` : `images/screen.jpg`
+      } alt="" />
+      <article>
+        <h3>${movies.title}</h3>
+        <p>${movies.vote_average.toFixed(1)}/10</p>
+        <p>Release Date: ${movies.release_date}</p>
+        <p>${movies.overview}</p>
+        <h4>Gengres:</h4>
+        ${movies.genres.map(genre => `<ul style="list-style-type: none;")><li>${genre.name}</li></ul>`).join('')}
+      </article>
+    </section>
+    
+    <section id="movie-info">
+      <h3>MOVIE INFO</h3>
+      <ul>
+        <li><span>Budget:</span> $${movies.budget.toLocaleString('en-US')}</li>
+        <li><span>Revenue:</span> $${movies.revenue.toLocaleString('en-US')}</li>
+        <li><span>Runtime:</span> ${movies.runtime} minutes</li>
+        <li><span>Status:</span> ${movies.status}</li>
+      </ul>
+      <div id="companies">
+        <h3>Production companies</h3>
+        ${movies.production_companies.map(company => `<span>${company.name}</span>`).join(', ')}
+      </div>
+    </section>
+    `
+}
+
+
 
 //PAGE ROUTER
 function init() {
   switch (global.currentPage) {
     case '/':
     case '/index.html':
-      displayPopularMovies('movie/popular', '#popular-movies #movies', 'title', 'release_date');
+      displayMovies('movie/popular', '#popular-movies #movies', 'title', 'release_date');
       break;
     case '/shows.html':
-      displayPopularMovies('tv/popular', '#popular-tv #tvshows', 'name', 'first_air_date');
+      displayMovies('tv/popular', '#popular-tv #tvshows', 'name', 'first_air_date');
       break;
     case '/show-details.html':
-      console.log('Derails')
+      getMovieDetails();
       break;
     case '/search.html':
       console.log('Search')
