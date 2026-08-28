@@ -69,13 +69,14 @@ async function fetchData(endpoint) {
 //GET MOVIE DETAILS
 async function getMovieDetails() {
   const movieId = window.location.search.split('=')[1];
-  console.log(movieId);
   
   const movies = await fetchData(`movie/${movieId}`);
   
-  console.log(movies)
+  const container = document.createElement('div');
   
-  document.querySelector('main').innerHTML += `
+  displayMovieBackdrop('movie', movies.backdrop_path);
+  
+  container.innerHTML = `
     <section id="movie-details">
       <img src = ${
         movies.poster_path ? `https://image.tmdb.org/t/p/w342${movies.poster_path}` : `images/screen.jpg`
@@ -85,8 +86,10 @@ async function getMovieDetails() {
         <p>${movies.vote_average.toFixed(1)}/10</p>
         <p>Release Date: ${movies.release_date}</p>
         <p>${movies.overview}</p>
-        <h4>Gengres:</h4>
+        <h4>Gengres</h4>
         ${movies.genres.map(genre => `<ul style="list-style-type: none;")><li>${genre.name}</li></ul>`).join('')}
+        
+        <button type="button" id="rtnBtn"><a href='${movies.homepage}'>Visit Movie Homepage</a></button>
       </article>
     </section>
     
@@ -104,9 +107,33 @@ async function getMovieDetails() {
       </div>
     </section>
     `
+    
+    document.querySelector('#movie-details-container').appendChild(container)
+    
 }
 
-
+//Overlay Background Image for Movies 
+function displayMovieBackdrop(type, backdropPath) {
+  const overlayDiv = document.createElement('div');
+  overlayDiv.style.backgroundImage = `url(https://image.tmdb.org/t/p/original${backdropPath})`;
+  overlayDiv.style.backgroundPosition = 'center';
+  overlayDiv.style.backgroundRepeat = 'no-repeat';
+  overlayDiv.style.backgroundSize = 'cover';
+  overlayDiv.style.position = 'absolute';
+  overlayDiv.style.top = '0';
+  overlayDiv.style.left = '0';
+  overlayDiv.style.zIndex = '-1';
+  overlayDiv.style.width = '100vw';
+  overlayDiv.style.height = '100vh';
+  overlayDiv.style.opacity = '0.1';
+  
+  
+  if (type === 'movie') {
+    document.querySelector('#movie-details-container').appendChild(overlayDiv);
+  } else {
+    document.querySelector('#tvshows').appendChild(overlayDiv);
+  }
+}
 
 //PAGE ROUTER
 function init() {

@@ -32,6 +32,7 @@ main header {
   justify-content: space-between;
   align-items: center;
   padding: 1rem;
+  background-color: var(--bg-primary);
 }
 main header nav ul {
   display: flex;
@@ -134,6 +135,14 @@ main section.parentCard .subparent-card .movie-card img {
 }
 #movie-details article p {
   margin-bottom: 0.5rem;
+}
+#movie-details article #rtnBtn {
+  margin-inline: 0;
+}
+#movie-details article #rtnBtn a {
+  text-decoration: none;
+  color: var(--text-primary);
+  padding: 0.5rem;
 }
 @media (width > 400px) {
   #movie-details {
