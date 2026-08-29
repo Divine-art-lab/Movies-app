@@ -56,14 +56,28 @@ function createElements(param, titleKey, dateKey) {
 async function fetchData(endpoint) {
   const API_URL = 'https://api.themoviedb.org/3/';
   const API_KEY = '2800bf9781420f03f7ab74f60245cbcf';
-  
-  showLoading();
-  const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
-  
-  const data = await response.json();
-  
-  hideLoading();
+  try {
+    showLoading();
+    const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
+    
+    if (response.status === 404) throw new Error('404 not found!');
+    if (response.status === 500) throw new Error('Internal server error!');
+    if (response.status === 0) throw new Error('Failed to fetch! please check your internet connection and try again');
+    
+    const data = await response.json();
+    
+    hideLoading();
   return data;
+  } catch (e) {
+    displayError(e);
+    console.log(e)
+  }
+  
+}
+
+//Display Error Message 
+function displayError(error) {
+  // Tab to edit
 }
 
 //GET MOVIE DETAILS
