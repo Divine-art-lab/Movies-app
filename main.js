@@ -21,14 +21,14 @@ function hideLoading() {
 
 
 //DISPLAY POPULAR MOVIES FUNCTION
-async function displayMovies(endpoint, parentElement, titleKey, dateKey) {
+async function displayMovies(endpoint, parentElement, titleKey, dateKey, location) {
   const { results } = await fetchData(endpoint);
   results.forEach((movie) => {
-    document.querySelector(parentElement).appendChild(createElements(movie, titleKey, dateKey));
+    document.querySelector(parentElement).appendChild(createElements(movie, titleKey, dateKey, location));
   })
 }
 //CREAT ELEMENTS
-function createElements(param, titleKey, dateKey) {
+function createElements(param, titleKey, dateKey, location) {
   const div = document.createElement('div');
   const image = document.createElement('img');
   const h3 = document.createElement('h3');
@@ -41,8 +41,7 @@ function createElements(param, titleKey, dateKey) {
   image.alt = param[titleKey];
   h3.textContent = param[titleKey];
   p.innerHTML = `Release: ${param[dateKey]}`;
-  anchor.href = `show-details.html?id=${param.id}`
-  
+  anchor.href = `${location}.html?id=${param.id}`;
   
   anchor.appendChild(image);
   anchor.appendChild(h3);
@@ -91,7 +90,7 @@ async function getMovieDetails() {
   displayMovieBackdrop('movie', movies.backdrop_path);
   
   container.innerHTML = `
-    <section id="movie-details">
+    <section id="movie-details" class="movie-details">
       <img src = ${
         movies.poster_path ? `https://image.tmdb.org/t/p/w342${movies.poster_path}` : `images/screen.jpg`
       } alt="" />
@@ -112,7 +111,7 @@ async function getMovieDetails() {
       <ul>
         <li><span>Budget:</span> $${movies.budget.toLocaleString('en-US')}</li>
         <li><span>Revenue:</span> $${movies.revenue.toLocaleString('en-US')}</li>
-        <li><span>Runtime:</span> ${movies.runtime} minutes</li>
+        <li><span>Runtime:</span> ${movies.episode_run_time} minutes</li>
         <li><span>Status:</span> ${movies.status}</li>
       </ul>
       <div id="companies">
@@ -125,6 +124,53 @@ async function getMovieDetails() {
     document.querySelector('#movie-details-container').appendChild(container)
     
 }
+
+async function getTVshowDetails() {
+  const movieId = window.location.search.split('=')[1];
+  
+  const tvshows = await fetchData(`tv/${movieId}`);
+  
+  const container = document.createElement('div');
+  
+  displayMovieBackdrop('tv', tvshows.backdrop_path);
+  
+  console.log(tvshows)
+  
+  container.innerHTML = `
+    <section id="tv-details" class="movie-details">
+      <img src = ${
+        tvshows.poster_path ? `https://image.tmdb.org/t/p/w342${tvshows.poster_path}` : `images/screen.jpg`
+      } alt="" />
+      <article>
+        <h3>${tvshows.name}</h3>
+        <p>${tvshows.vote_average.toFixed(1)}/10</p>
+        <p>First Air Date: ${tvshows.first_air_date}</p>
+        <p>${tvshows.overview}</p>
+        <h4>Gengres</h4>
+        ${tvshows.genres.map(genre => `<ul style="list-style-type: none;")><li>${genre.name}</li></ul>`).join('')}
+        
+        <button type="button" id="rtnBtn"><a href='${tvshows.homepage}'>Visit Movie Homepage</a></button>
+      </article>
+    </section>
+    
+    <section id="movie-info">
+      <h3>MOVIE INFO</h3>
+      <ul>
+      <li><span>Number of Episodes:</span> ${tvshows.number_of_episodes}</li>
+    <li><span>Last Episode To Air:</span> ${tvshows.last_episode_to_air.name}</li>
+        <li><span>Status:</span> ${tvshows.status}</li>
+      </ul>
+      <div id="companies">
+        <h3>Production companies</h3>
+        ${tvshows.production_companies.map(company => `<span>${company.name}</span>`).join(', ')}
+      </div>
+    </section>
+    `
+    
+    document.querySelector('#tv-details-container').appendChild(container)
+    
+}
+
 
 //Overlay Background Image for Movies 
 function displayMovieBackdrop(type, backdropPath) {
@@ -145,7 +191,7 @@ function displayMovieBackdrop(type, backdropPath) {
   if (type === 'movie') {
     document.querySelector('#movie-details-container').appendChild(overlayDiv);
   } else {
-    document.querySelector('#tvshows').appendChild(overlayDiv);
+    document.querySelector('#tv-details-container').appendChild(overlayDiv);
   }
 }
 
@@ -154,14 +200,18 @@ function init() {
   switch (global.currentPage) {
     case '/':
     case '/index.html':
-      displayMovies('movie/popular', '#popular-movies #movies', 'title', 'release_date');
+      displayMovies('movie/popular', '#popular-movies #movies', 'title', 'release_date', 'show-details');
       break;
     case '/shows.html':
-      displayMovies('tv/popular', '#popular-tv #tvshows', 'name', 'first_air_date');
+      displayMovies('tv/popular', '#popular-tv #tvshows', 'name', 'first_air_date', 'tv-details');
       break;
     case '/show-details.html':
       getMovieDetails();
       break;
+    case '/tv-details.html':
+      getTVshowDetails();
+      break;
+    
     case '/search.html':
       console.log('Search')
       break;

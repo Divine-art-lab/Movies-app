@@ -123,23 +123,23 @@ main section.parentCard .subparent-card .movie-card img {
   background-color: var(--accent-dark);
   color: var(--text-primary);
 }
-#movie-details {
+.movie-details {
   padding: 1rem;
 }
-#movie-details img {
+.movie-details img {
   width: 100%;
 }
-#movie-details article h3 {
+.movie-details article h3 {
   text-align: center;
   padding: 1rem;
 }
-#movie-details article p {
+.movie-details article p {
   margin-bottom: 0.5rem;
 }
-#movie-details article #rtnBtn {
+.movie-details article #rtnBtn {
   margin-inline: 0;
 }
-#movie-details article #rtnBtn a {
+.movie-details article #rtnBtn a {
   text-decoration: none;
   color: var(--text-primary);
   padding: 0.5rem;
