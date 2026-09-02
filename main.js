@@ -79,6 +79,54 @@ function displayError(error) {
   // Tab to edit
 }
 
+//NOW PLAYING MOVIES. SLIDE.
+async function nowPlayingSlide() {
+  const { results } = await fetchData('movie/now_playing');
+  
+  
+  
+  results.forEach((movie) => {
+    const div = document.createElement('div');
+    div.classList.add('swiper-slide');
+    
+    div.innerHTML = `
+        <a href='/show-details.html?id=${movie.id}'>
+          <img src='https://image.tmdb.org/t/p/w500${movie.poster_path}'>
+          <h3>${movie.vote_average.toFixed(1)}/10</h3>
+        </a>
+    `;
+    
+    document.querySelector('.swiper-wrapper').appendChild(div);
+    
+    initSwiper();
+  })
+  
+}
+
+function initSwiper() {
+  const swiper = new Swiper('.swiper', {
+    slidesPerView: 1,
+    spaceBetween: 30,
+    loop: true,
+    freeMode: true,
+    autoplay: {
+      delay: 4000,
+      disableOnInteraction: false
+    },
+    breakpoints: {
+      500: {
+        slidesPerView: 2
+      },
+      700: {
+        slidesPerView: 3
+      },
+      1200: {
+        slidesPerView: 4
+      }
+    }
+  })
+}
+
 //GET MOVIE DETAILS
 async function getMovieDetails() {
   const movieId = window.location.search.split('=')[1];
@@ -111,7 +159,7 @@ async function getMovieDetails() {
       <ul>
         <li><span>Budget:</span> $${movies.budget.toLocaleString('en-US')}</li>
         <li><span>Revenue:</span> $${movies.revenue.toLocaleString('en-US')}</li>
-        <li><span>Runtime:</span> ${movies.episode_run_time} minutes</li>
+        <li><span>Runtime:</span> ${movies.runtime} minutes</li>
         <li><span>Status:</span> ${movies.status}</li>
       </ul>
       <div id="companies">
@@ -200,6 +248,7 @@ function init() {
   switch (global.currentPage) {
     case '/':
     case '/index.html':
+      nowPlayingSlide();
       displayMovies('movie/popular', '#popular-movies #movies', 'title', 'release_date', 'show-details');
       break;
     case '/shows.html':
@@ -222,5 +271,7 @@ function init() {
   
   highlightActiveLink()
 }
+
+
 
 document.addEventListener('DOMContentLoaded', init);

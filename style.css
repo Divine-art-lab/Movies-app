@@ -53,7 +53,39 @@ main header nav ul li a.activeLink {
 }
 main section#banner {
   text-align: center;
+  background-image: url('./images/showcase-bg.jpg');
+  
+}
+main section#banner .swiper {
+  height: 70%;
+  width: 100%;
   padding: 1rem;
+}
+/*main section#banner .swiper .swiper-wrapper {
+  padding: 1rem;
+  border: 1px solid yellow;
+}*/
+main section#banner .swiper .swiper-wrapper .swiper-slide {
+  width: 100%;
+}
+main section#banner .swiper .swiper-wrapper .swiper-slide a {
+  text-decoration: none;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+main section#banner .swiper .swiper-wrapper .swiper-slide a img {
+  max-width: 100%;
+  object-fit: cover;
+}
+main section#banner .swiper .swiper-wrapper .swiper-slide a h3 {
+  color: var(--text-primary);
+  text-align: center;
+  background-color: var(--bg-primary);
+  width: 100%;
+  padding: 0.5rem;
 }
 main section#search {
   display: flex;
@@ -145,7 +177,7 @@ main section.parentCard .subparent-card .movie-card img {
   padding: 0.5rem;
 }
 @media (width > 400px) {
-  #movie-details {
+  .movie-details {
     display: flex;
     gap: 10px;
   }
@@ -153,7 +185,7 @@ main section.parentCard .subparent-card .movie-card img {
     width: 50%;
   }
 }
-#movie-info {
+.movie-info {
   padding: 1rem;
 }
 #movie-info > h3 {
