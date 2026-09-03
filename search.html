@@ -22,25 +22,40 @@
       </nav>
     </header>
     
+    <div id="msgBox">
+      
+    </div>
+    
     <section id="search">
-      <form method="get" accept-charset="utf-8">
-        
+      <form action="/search.html" method="get" accept-charset="utf-8">
+  
         <div>
-          <input type="radio" name="movies" id="movies" />
+          <input type="radio" name="type" value="movie" id="movies" checked />
           <label for="movies">Movies</label>
           
-          <input type="radio" name="movies" id="tvShows" />
+          <input type="radio" name="type" value="tv" id="tvShows" />
           <label for="tvShows">TV Shows</label>
         </div>
         
         <div>
           <input type="search" name="search" id="search-bar" placeholder="Enter search item">
-          <button type="submit"><i class="fa fa-search"></i></button>
+          <button type="submit"><i class="fas fa-user"></i></button>
         </div>
         
       </form>
     </section>
+    
+    <section id="search-movies" class="parentCard">
+      <h2>Search results</h2>
+      <section id="searchResults" class="subparent-card">
+        
+      </section>
+    </section>
   </main>
+  
+  <div id="loading" class="hide">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
 </body>
 
 </html>

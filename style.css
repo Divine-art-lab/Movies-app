@@ -207,3 +207,15 @@ main section.parentCard .subparent-card .movie-card img {
   padding: 1rem;
   padding-inline: 0;
 }
+
+/*SEARCH STYLING*/
+#msgBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.alert {
+  padding: 10px;
+  border-radius: 4px;
+  background-color: red;
+}

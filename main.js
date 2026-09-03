@@ -1,5 +1,13 @@
 const global = {
-  currentPage: window.location.pathname
+  currentPage: window.location.pathname,
+  search: {
+    term: '',
+    type: ''
+  },
+  api: {
+    apiKey: '2800bf9781420f03f7ab74f60245cbcf',
+    apiUrl: 'https://api.themoviedb.org/3/'
+  }
 }
 
 //HIGHLIGHT ACTIVE LINKS 
@@ -11,6 +19,7 @@ function highlightActiveLink() {
     }
   })
 }
+
 //SHOW AND HIDE LOADING ICON
 function showLoading() {
   document.querySelector('#loading').className = 'show';
@@ -53,8 +62,8 @@ function createElements(param, titleKey, dateKey, location) {
 
 //CREATE FETCH DATA API FUNCTION
 async function fetchData(endpoint) {
-  const API_URL = 'https://api.themoviedb.org/3/';
-  const API_KEY = '2800bf9781420f03f7ab74f60245cbcf';
+  const API_URL = global.api.apiUrl;
+  const API_KEY = global.api.apiKey;
   try {
     showLoading();
     const response = await fetch(`${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`);
@@ -102,7 +111,7 @@ async function nowPlayingSlide() {
   })
   
 }
-
+//INITIALIZE THE SWIPER FOR FUNCTIONALITY
 function initSwiper() {
   const swiper = new Swiper('.swiper', {
     slidesPerView: 1,
@@ -172,7 +181,7 @@ async function getMovieDetails() {
     document.querySelector('#movie-details-container').appendChild(container)
     
 }
-
+//GET TV SHOW DETAILS
 async function getTVshowDetails() {
   const movieId = window.location.search.split('=')[1];
   
@@ -243,6 +252,61 @@ function displayMovieBackdrop(type, backdropPath) {
   }
 }
 
+//SEARCH FUNCTIONALITY
+async function search() {
+  const queryString = window.location.search;
+  
+  const urlParam = new URLSearchParams(queryString);
+  
+  global.search.term = urlParam.get('search');
+  global.search.type = urlParam.get('type');
+  
+  if (global.search.term !== '' && global.search.term !== null) {
+    const {results} = await fetchSearchData();
+    
+    results.forEach((movie) => {
+      document.querySelector('#searchResults').appendChild(createElements(movie, 'title', 'release_date', '/show-details'));
+    })
+    
+  } else {
+    alertMessage('please search for a term', 'alert')
+    //alert('please search for a term');
+  }
+}
+//Fetch Search Data
+async function fetchSearchData() {
+  const API_URL = global.api.apiUrl;
+  const API_KEY = global.api.apiKey;
+  try {
+    showLoading();
+    const response = await fetch(`${API_URL}search/${global.search.type}?api_key=${API_KEY}&language=en-US&query=${global.search.term}`);
+    
+    if (response.status === 404) throw new Error('404 not found!');
+    if (response.status === 500) throw new Error('Internal server error!');
+    if (response.status === 0) throw new Error('Failed to fetch! please check your internet connection and try again');
+    
+    const data = await response.json();
+    
+    hideLoading();
+    return data;
+  } catch (e) {
+    displayError(e);
+    console.log(e)
+  }
+  
+}
+
+//show alert
+function alertMessage(message, className) {
+  const alertEl = document.createElement('p');
+  alertEl.classList.add('alert', className);
+  alertEl.appendChild(document.createTextNode(message));
+  
+  document.querySelector('#msgBox').appendChild(alertEl);
+  
+  setTimeout(() => alertEl.remove(), 3000);
+}
+
 //PAGE ROUTER
 function init() {
   switch (global.currentPage) {
@@ -262,7 +326,7 @@ function init() {
       break;
     
     case '/search.html':
-      console.log('Search')
+      search();
       break;
     
     default:
