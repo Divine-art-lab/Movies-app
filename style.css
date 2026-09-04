@@ -219,3 +219,13 @@ main section.parentCard .subparent-card .movie-card img {
   border-radius: 4px;
   background-color: red;
 }
+.success {
+  background-color: green;
+}
+.error {
+  background-color: red;
+}
+.warning {
+  background-color: var(--accent-dark);
+  color: var(--bg-primary);
+}

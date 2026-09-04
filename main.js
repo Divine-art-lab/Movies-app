@@ -264,12 +264,17 @@ async function search() {
   if (global.search.term !== '' && global.search.term !== null) {
     const {results} = await fetchSearchData();
     
+    if (results.length === 0) {
+      showAlert('no search result found', 'warning');
+      return
+    };
+    
     results.forEach((movie) => {
-      document.querySelector('#searchResults').appendChild(createElements(movie, 'title', 'release_date', '/show-details'));
+      document.querySelector('#searchResults').appendChild(createElements(movie, global.search.type === 'movie' ? 'title' : 'name', global.search.type === 'movie' ? 'release_date' : 'first_air_date', `/${global.search.type}-details`));
     })
     
   } else {
-    alertMessage('please search for a term', 'alert')
+    showAlert('please search for a term', 'alert')
     //alert('please search for a term');
   }
 }
@@ -297,7 +302,7 @@ async function fetchSearchData() {
 }
 
 //show alert
-function alertMessage(message, className) {
+function showAlert(message, className) {
   const alertEl = document.createElement('p');
   alertEl.classList.add('alert', className);
   alertEl.appendChild(document.createTextNode(message));
@@ -313,12 +318,12 @@ function init() {
     case '/':
     case '/index.html':
       nowPlayingSlide();
-      displayMovies('movie/popular', '#popular-movies #movies', 'title', 'release_date', 'show-details');
+      displayMovies('movie/popular', '#popular-movies #movies', 'title', 'release_date', 'movie-details');
       break;
     case '/shows.html':
       displayMovies('tv/popular', '#popular-tv #tvshows', 'name', 'first_air_date', 'tv-details');
       break;
-    case '/show-details.html':
+    case '/movie-details.html':
       getMovieDetails();
       break;
     case '/tv-details.html':
