@@ -92,16 +92,14 @@ function displayError(error) {
 async function nowPlayingSlide() {
   const { results } = await fetchData('movie/now_playing');
   
-  
-  
   results.forEach((movie) => {
     const div = document.createElement('div');
     div.classList.add('swiper-slide');
     
     div.innerHTML = `
-        <a href='/show-details.html?id=${movie.id}'>
+        <a href='/movie-details.html?id=${movie.id}'>
           <img src='https://image.tmdb.org/t/p/w500${movie.poster_path}'>
-          <h3>${movie.vote_average.toFixed(1)}/10</h3>
+          <h3><i class="fa fa-star" style="color: var(--accent);"></i> ${movie.vote_average.toFixed(1)}/10</h3>
         </a>
     `;
     
@@ -153,7 +151,7 @@ async function getMovieDetails() {
       } alt="" />
       <article>
         <h3>${movies.title}</h3>
-        <p>${movies.vote_average.toFixed(1)}/10</p>
+        <p><i class="fa fa-star" style="color: var(--accent);"></i> ${movies.vote_average.toFixed(1)}/10</p>
         <p>Release Date: ${movies.release_date}</p>
         <p>${movies.overview}</p>
         <h4>Gengres</h4>
@@ -200,7 +198,7 @@ async function getTVshowDetails() {
       } alt="" />
       <article>
         <h3>${tvshows.name}</h3>
-        <p>${tvshows.vote_average.toFixed(1)}/10</p>
+        <p><i class="fa fa-star" style="color: var(--accent);"></i> ${tvshows.vote_average.toFixed(1)}/10</p>
         <p>First Air Date: ${tvshows.first_air_date}</p>
         <p>${tvshows.overview}</p>
         <h4>Gengres</h4>
