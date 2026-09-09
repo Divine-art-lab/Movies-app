@@ -2,7 +2,10 @@ const global = {
   currentPage: window.location.pathname,
   search: {
     term: '',
-    type: ''
+    type: '',
+    page: 1,
+    totalPages: 0,
+    totalResults: 0,
   },
   api: {
     apiKey: '2800bf9781420f03f7ab74f60245cbcf',
@@ -260,21 +263,85 @@ async function search() {
   global.search.type = urlParam.get('type');
   
   if (global.search.term !== '' && global.search.term !== null) {
-    const {results} = await fetchSearchData();
+    const { results, page, total_pages, total_results } = await fetchSearchData();
+    
+    global.search.page = page;
+    global.search.totalPages = total_pages;
+    global.search.totalResults = results;
     
     if (results.length === 0) {
       showAlert('no search result found', 'warning');
       return
     };
     
+    displaySearchHeading();
+    
     results.forEach((movie) => {
       document.querySelector('#searchResults').appendChild(createElements(movie, global.search.type === 'movie' ? 'title' : 'name', global.search.type === 'movie' ? 'release_date' : 'first_air_date', `/${global.search.type}-details`));
     })
+    
+    displayPagination();
     
   } else {
     showAlert('please search for a term', 'alert')
     //alert('please search for a term');
   }
+}
+
+//CREATE AND DISPLAY THE SEARCH RESULTS HEADER
+function displaySearchHeading() {
+  document.querySelector('#search-heading').innerHTML = `
+    <h3>${global.search.page} of ${global.search.totalPages} for the result ${global.search.term}</h3>
+    `
+}
+
+function displayPagination() {
+  document.querySelector('#pagination').innerHTML =`
+   <button type="button" id="prev">prev</button> 
+   <button type="button" id="next"> next </button> 
+   <p> page ${global.search.page} of ${global.search.totalPages} </p>
+  `;
+  if (global.search.page === 1) {
+    document.querySelector('#prev').disabled = true;
+  }
+  
+  if (global.search.page === global.search.totalPages) {
+    document.querySelector('#next').disabled = true;
+  }
+  
+  document.querySelector('#prev').addEventListener('click', async () => {
+    global.search.page--;
+    
+    const { results /*, page, total_pages, total_results*/ } = await fetchSearchData();
+
+    document.querySelector('#searchResults').innerHTML = '';
+
+    displaySearchHeading();
+
+    results.forEach((movie) => {
+    document.querySelector('#searchResults').appendChild(createElements(movie, global.search.type === 'movie' ? 'title' : 'name', global.search.type === 'movie' ? 'release_date' : 'first_air_date', `/${global.search.type}-details`));
+    });
+
+    displayPagination();
+  });
+  
+  document.querySelector('#next').addEventListener('click', async () => {
+    global.search.page++;
+    
+    console.log(global.search.page)
+    
+    const { results/*, page, total_pages, total_results*/ } = await fetchSearchData();
+    
+    document.querySelector('#searchResults').innerHTML = '';
+    
+    displaySearchHeading();
+    
+    results.forEach((movie) => {
+      document.querySelector('#searchResults').appendChild(createElements(movie, global.search.type === 'movie' ? 'title' : 'name', global.search.type === 'movie' ? 'release_date' : 'first_air_date', `/${global.search.type}-details`));
+    });
+    
+    displayPagination();
+})
 }
 //Fetch Search Data
 async function fetchSearchData() {
@@ -282,7 +349,7 @@ async function fetchSearchData() {
   const API_KEY = global.api.apiKey;
   try {
     showLoading();
-    const response = await fetch(`${API_URL}search/${global.search.type}?api_key=${API_KEY}&language=en-US&query=${global.search.term}`);
+    const response = await fetch(`${API_URL}search/${global.search.type}?api_key=${API_KEY}&language=en-US&query=${global.search.term}&page=${global.search.page}`);
     
     if (response.status === 404) throw new Error('404 not found!');
     if (response.status === 500) throw new Error('Internal server error!');
